@@ -2,8 +2,11 @@ import joi from 'joi';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import chalk from 'chalk';
+import dotenv from 'dotenv';
 
 import db from '../database.js';
+
+dotenv.config();
 
 export async function signUpUser(req, res) {
     const {name, email, password, confirmPassword} = req.body;
