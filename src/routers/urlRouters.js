@@ -1,10 +1,14 @@
 import { Router } from "express";
 
+import { 
+    createShortUrlUser, getShortUrl, getShortUrlRedirect, deleteShortUrlUser 
+} from "../controllers/urlControllers.js";
+
 const urlRouter = Router();
 
-urlRouter.post('/urls/shorten', );
-urlRouter.get('/urls/:id', );
-urlRouter.get('/urls/open/:shortUrl', );
-urlRouter.delete('/urls/:id', );
+urlRouter.post('/urls/shorten', createShortUrlUser);
+urlRouter.get('/urls/:id', getShortUrl);
+urlRouter.get('/urls/open/:shortUrl', getShortUrlRedirect);
+urlRouter.delete('/urls/:id', deleteShortUrlUser);
 
 export default urlRouter;
