@@ -14,3 +14,18 @@ CREATE TABLE "sessions"(
     "token" TEXT UNIQUE NOT NULL,
     "createdAt" TIMESTAMP DEFAULT NOW()
 );
+
+CREATE TABLE "linksUsers"(
+    "id" SERIAL PRIMARY KEY NOT NULL,
+    "userId" INTEGER REFERENCES "users"("id") NOT NULL, 
+    "linkId" INTEGER REFERENCES "links"("id") NOT NULL,
+    "views" INTEGER DEFAULT 0,
+    "createdAt" TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE "links"(
+    "id" SERIAL PRIMARY KEY NOT NULL, 
+    "url" TEXT NOT NULL,
+    "shortUrl" TEXT NOT NULL,
+    "createdAt" TIMESTAMP DEFAULT NOW()
+);
