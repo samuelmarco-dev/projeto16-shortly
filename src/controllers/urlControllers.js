@@ -84,8 +84,20 @@ export async function createShortUrlUser(req, res) {
 }
 
 export async function getShortUrl(req, res) {
+    const {id} = req.params;
+    console.log('id enviado', id);
+
     try {
-        console.log('teste');
+        const link = await db.query(`
+            SELECT id, url, "shortUrl" FROM links WHERE id = $1
+        `, [id]);
+        console.log(link);
+
+        const [linkId] = link.rows;
+        const verify = !linkId || link.rowCount !== 1 || !linkId.shortUrl;
+        if(verify) return res.sendStatus(404);
+        
+        res.send(linkId).status(200);
     } catch (error) {
         console.log(chalk.red(error));
         res.sendStatus(500);
