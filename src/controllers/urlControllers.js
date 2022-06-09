@@ -105,8 +105,34 @@ export async function getShortUrl(req, res) {
 }
 
 export async function getShortUrlRedirect(req, res) {
+    const {shortUrl} = req.params;
+    console.log('url encurtada enviada', shortUrl);
+    
     try {
-        console.log('teste');
+        const urlEncurtada = await db.query(`
+            SELECT * FROM links WHERE "shortUrl" = $1
+        `, [shortUrl]);
+        console.log('url encontrada', urlEncurtada);
+
+        const [url] = urlEncurtada.rows;
+        const verifyShortUrl = !url || urlEncurtada.rowCount !== 1 || url.shortUrl !== shortUrl;
+        if(verifyShortUrl || !url.shortUrl) return res.sendStatus(404);
+        
+        const relacaoUrl = await db.query(`
+            SELECT * FROM "linksUsers" WHERE "linkId" = $1
+        `, [url.id]);
+        console.log('relacao entre linkId e userId', relacaoUrl);
+        
+        const [relacao] = relacaoUrl.rows;
+        const verifyRelacao = !relacao || relacaoUrl.rowCount !== 1 || relacao.linkId !== url.id;
+        if(verifyRelacao) return res.sendStatus(404);
+
+        const views = relacao.views + 1;
+        await db.query(`
+            UPDATE "linksUsers" SET views = $1 WHERE "linkId" = $2
+        `, [views, url.id]);
+
+        res.redirect(url.url);
     } catch (error) {
         console.log(chalk.red(error));
         res.sendStatus(500);
