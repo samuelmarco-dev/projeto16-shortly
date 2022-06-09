@@ -38,7 +38,7 @@ export async function detailsUrlsUser(req, res){
         console.log('usuário encontrado', user);
 
         const userExiste = user.rows[0];
-        const verifyUser = user.rowCount !== 1 || userExiste.id !== idUser;
+        const verifyUser = user.rowCount !== 1 || userExiste.id !== idUser || userExiste.id !== Number(id);
         if(!userExiste) return res.sendStatus(404);
         if(verifyUser) return res.sendStatus(401);
 
