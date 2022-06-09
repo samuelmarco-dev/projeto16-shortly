@@ -179,13 +179,13 @@ export async function deleteShortUrlUser(req, res) {
         `, [id]);
         console.log('link encontrado', link);
 
-        const [linkId] = link.rows;
-        const verifyLink = !linkId || link.rowCount !== 1 || linkId.id !== id || !linkId.shortUrl;
+        const linkId = link.rows[0];
+        const verifyLink = !linkId || link.rowCount !== 1 || linkId.id !== Number(id) || !linkId.shortUrl;
         if(verifyLink) return res.sendStatus(401);
 
         const relacao = await db.query(`
             SELECT * FROM "linksUsers" WHERE "linkId" = $1 AND "userId" = $2
-        `, [linkId.id, idUser]);
+        `, [Number(id), idUser]);
         console.log('relacao entre linkId e userId', relacao);
 
         const [relacaoId] = relacao.rows;
@@ -194,7 +194,7 @@ export async function deleteShortUrlUser(req, res) {
 
         await db.query(`
             DELETE FROM "linksUsers" WHERE "linkId" = $1 AND "userId" = $2
-        `, [linkId.id, idUser]);
+        `, [Number(id), idUser]);
         await db.query(`
             DELETE FROM links WHERE id = $1
         `, [id]);
