@@ -26,6 +26,6 @@ CREATE TABLE "linksUsers"(
 CREATE TABLE "links"(
     "id" SERIAL PRIMARY KEY NOT NULL, 
     "url" TEXT NOT NULL,
-    "shortUrl" TEXT NOT NULL,
+    "shortUrl" TEXT UNIQUE NOT NULL,
     "createdAt" TIMESTAMP DEFAULT NOW()
 );
