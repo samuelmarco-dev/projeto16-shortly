@@ -1,4 +1,3 @@
-import joi from 'joi';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import chalk from 'chalk';
@@ -50,24 +49,22 @@ export async function detailsUrlsUser(req, res){
         console.log('views total', viewsTotal);
 
         const viewsId = viewsTotal.rows[0];
-        const verifyViews = !viewsId || viewsTotal.rowCount !== 1 || viewsId.sumViews === null;
+        const verifyViews = !viewsId || viewsTotal.rowCount !== 1 || !viewsId.sumViews;
         if(verifyViews) return res.sendStatus(401);
 
         const result = await db.query(`
             SELECT *  
             FROM "linksUsers" lusr
             JOIN "links" l ON lusr."linkId" = l.id
-            JOIN "users" u ON lusr."userId" = u.id
-            WHERE u.id = $1
+            WHERE lusr."userId" = $1
         `, [id]);
         console.log('resultado da query', result);
 
         const object = {
             "id": userExiste.id,
             "name": userExiste.name,
-            "visitCount": viewsId.sumViews,
+            "visitCount": Number(viewsId.sumViews),
             "shortenedUrls": result.rows.map(row => {
-                console.log('row', row);
                 return {
                     "id": row.linkId,
                     "shortUrl": row.shortUrl,
