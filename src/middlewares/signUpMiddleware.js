@@ -6,7 +6,7 @@ import db from "../database.js";
 function validateSchemaSignUp(req, res, next){
     const {name, email, password, confirmPassword} = req.body;
 
-    if(!confirmPassword) return res.status(400).send('All fields are mandatory');
+    if(!confirmPassword) return res.status(422).send('All fields are mandatory');
     const validation = schemaSignUp.validate({name, email, password, confirmPassword}, {abortEarly: false});
 
     const {error} = validation;

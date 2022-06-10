@@ -33,7 +33,7 @@ async function validateRelationUrl(req, res, next){
 
         const link = linkCriado.rows[0];
         const verifyLink = !link || linkCriado.rowCount !== 1 || link.shortUrl !== urlShort;
-        if(verifyLink) return res.sendStatus(401);
+        if(verifyLink) return res.sendStatus(404);
 
         res.locals.link = link;
         res.locals.urlShort = urlShort;

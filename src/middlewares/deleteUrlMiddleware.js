@@ -12,7 +12,8 @@ async function validateRelacionDeleteUrl(req, res, next){
         `, [id]);
 
         const linkId = link.rows[0];
-        const verifyLink = !linkId || link.rowCount !== 1 || linkId.id !== Number(id) || !linkId.shortUrl;
+        const verifyLink = !linkId || link.rowCount !== 1 || linkId.id !== Number(id);
+        if(!linkId.shortUrl) return res.sendStatus(404);
         if(verifyLink) return res.sendStatus(401);
 
         const relacao = await db.query(`

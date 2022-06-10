@@ -58,7 +58,7 @@ export async function deleteShortUrlUser(req, res) {
             DELETE FROM links WHERE id = $1
         `, [id]);
 
-        res.sendStatus(200);
+        res.sendStatus(204);
     } catch (error) {
         console.log(chalk.red(error));
         res.sendStatus(500);
