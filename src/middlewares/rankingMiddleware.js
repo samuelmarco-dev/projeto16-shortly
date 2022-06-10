@@ -4,14 +4,12 @@ import db from "../database.js";
 
 async function countViewsUser(req, res, next){
     const {id} = req.params;
-    console.log('id do usuario', id);
     
     try {
         const viewsTotal = await db.query(`
             SELECT SUM(lusr."views") as "sumViews"
             FROM "linksUsers" lusr WHERE lusr."userId" = $1
         `, [id]);
-        console.log('views total', viewsTotal);
 
         const viewsId = viewsTotal.rows[0];
         const verifyViews = !viewsId || viewsTotal.rowCount !== 1 || !viewsId.sumViews;
@@ -36,7 +34,6 @@ async function resultRankingUsers(req, res, next){
             GROUP BY "linksUsers"."userId", users.id 
             ORDER BY "visitCount" DESC LIMIT 10
         `, []);
-        console.log('resultado da query', result);
 
         const verify = result.rowCount === 0 || result.rows.length === 0;
         if(verify) return res.sendStatus(404);

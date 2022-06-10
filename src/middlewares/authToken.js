@@ -8,7 +8,6 @@ dotenv.config();
 async function authorizationToken(req, res, next){
     const {authorization} = req.headers;
     const token = authorization?.replace('Bearer', '').trim();
-    console.log('Token na requisição', token);
     if(!token) return res.status(401).send('User is not authorized');
     
     try {
