@@ -10,6 +10,7 @@ export async function detailsUrlsUser(req, res){
     console.log('id do usuario', id);
     const {userExiste, viewsId} = res.locals;
     console.log('userExiste', userExiste);
+    console.log('viewsId', viewsId);
 
     try {
         const result = await db.query(`
